@@ -12,17 +12,21 @@ header {
 
 main {
  flex: 1; 
- display: flex;
  justify-content: center;
  align-items: center;
  color: #000; 
+ margin-top: 2rem;
+ margin-bottom: 1rem;
 }
+
 footer {
     height: 100px;
     background-color: #145a32;
     color: #fff;
     padding: 0.5rem;
-    align-items: center;
+    bottom: 0;
     display: flex;
     justify-content: center;
+    align-items: center;
+    
 }

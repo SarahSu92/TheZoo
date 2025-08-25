@@ -2,7 +2,7 @@ import { createBrowserRouter } from "react-router";
 import { Layout } from "./layout/Layout";
 import { Error } from "./pages/ErrorPage";
 import { Home } from "./pages/HomePage";
-import { Animals } from "./pages/AnimalPage";
+import { Animal } from "./pages/AnimalPage";
 
 export const Router = createBrowserRouter([
     {
@@ -16,7 +16,7 @@ export const Router = createBrowserRouter([
             },
             {
                 path: '/Animals',
-                element: <Animals />
+                element: <Animal />
             },
         ],
     },
