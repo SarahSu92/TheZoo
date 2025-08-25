@@ -1,15 +1,12 @@
-.container {
+.about-container {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     gap: 1rem;
     width: 80vw;
     margin: 0 auto;
-    
-    
-
 }
 
-.animal-frame {
+.about-animal {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -24,6 +21,7 @@ img {
     max-width: 100%;
     height: auto;
     border-radius: 10px;
+    margin-bottom: 1rem;
     object-fit: cover;
     
 }
@@ -32,21 +30,18 @@ p {
     font-size: 1rem;
 }
 
-h3 {
+button {
     font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #000;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #96c93d; 
+    transition: transform 0.2s ease, background 0.3s ease;
+    font-weight: bold;
+
 }
 
-
-.link {
-  color: #013007;
-  text-decoration: none;
-  font-size: 1.2rem;
-  transition: transform 0.2s ease, background 0.3s ease;
-
-  &:hover {
-    text-decoration: underline;
-    color: #013007;
+ button:hover { 
     transform: scale(1.1);
-
-  }
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import type { Animals } from '../models/Animals';
 import '../sass/Animals.scss';
+import { Link } from 'react-router';
 
 
 export const Animal = () => {
@@ -19,6 +20,8 @@ export const Animal = () => {
     getAnimals();
   });
 
+
+
   return (
     <div className="container">
       {animals.map((a) => (
@@ -29,14 +32,14 @@ export const Animal = () => {
             src={a.imageUrl}
             alt={`Bild på ${a.name}, som heter ${a.latinName} på latin. ${a.shortDescription}`}
             onError={(e) => {
-              e.currentTarget.src = 'public/No-Image-Placeholder.svg'; 
+              e.currentTarget.src = '/No-Image-Placeholder.svg'; 
             }}
           />
           <p>{a.shortDescription}</p>
-          <p>{a.latinName}</p>
-          <p>{a.yearOfBirth}</p>
-          <h3>{a.longDescription}</h3>
-          <button>Mata</button>
+          <p>Födelseår: {a.yearOfBirth}</p>
+          <Link to={`/AboutAnimal/${a.id}`} className='link'>
+            <h3>Besök {a.name}</h3>
+          </Link>
         </div>
       ))}
     </div>

@@ -4,6 +4,7 @@ import './Navigation.scss';
 export const Navigation = () => {
   return (
     <nav>
+      <a href="/" className='logo'>The Zoo</a>
       <ul>
         <li>
           <NavLink to={'/'}>Hem</NavLink>
