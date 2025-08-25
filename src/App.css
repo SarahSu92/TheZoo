@@ -1,14 +1,11 @@
 body {
-  margin: 0;
+  margin: 1rem;
 }
 
 #root {
   min-height: 100dvh;
   width: 100%;
-  text-align: center;
   display:flex;
   flex-direction: column;
   margin: 0 auto;
-   align-items: center;     /* Center horizontally */
-  justify-content: center; /* Center vertically */
 }
