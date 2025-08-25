@@ -1,0 +1,22 @@
+
+
+header {
+    height: 50px;
+    background-color: lightgreen;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+main {
+ background-color: lightyellow;
+ flex: 1; 
+ display: flex;
+ justify-content: center;
+ align-items: center;
+}
+
+footer {
+    height: 150px;
+    background-color: grey;
+}
