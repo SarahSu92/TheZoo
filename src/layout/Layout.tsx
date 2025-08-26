@@ -4,13 +4,13 @@ import { Navigation } from '../navigation/Navigation';
 import { Footer } from '../footer/Footer';
 import { AnimalContext } from '../context/AnimalContext';
 import { useReducer } from 'react';
-import {  AnimalReducer  } from '../reducers/AnimalReducer';
+import { AnimalReducer } from '../reducers/AnimalReducer';
+import type { AnimalFeds } from '../models/Animals';
+import { loadAnimalsFromLocalStorage } from '../helpers/saveAnimalsToLocalStorage';
 
 export const Layout = () => {
-  const [animalfeds, dispatch] = useReducer(
-    AnimalReducer,
-    [], 
-  );
+  const initialAnimals: AnimalFeds[] = loadAnimalsFromLocalStorage() || [];
+  const [animalfeds, dispatch] = useReducer(AnimalReducer, initialAnimals);
 
   return (
     <AnimalContext.Provider value={{ animalfeds, dispatch }}>
@@ -26,5 +26,3 @@ export const Layout = () => {
     </AnimalContext.Provider>
   );
 };
-
-

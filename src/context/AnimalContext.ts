@@ -1,12 +1,13 @@
 import { type Dispatch, createContext } from "react";
-import { type AnimalFedAction, type AnimalFeds } from "../reducers/AnimalReducer";
+import { type AnimalFedAction } from "../reducers/AnimalReducer";
+import type { AnimalFeds } from "../models/Animals";
 
-export type AnimalContextType = {
+export type AnimalContextTypes = {
     animalfeds: AnimalFeds[];
     dispatch: Dispatch<AnimalFedAction>;
 }
 
-export const AnimalContext = createContext<AnimalContextType>({
+export const AnimalContext = createContext<AnimalContextTypes>({
     animalfeds: [],
     dispatch: () => {},
 });

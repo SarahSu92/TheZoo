@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import type { IAnimalExt } from '../models/IAnimal';
 import { useParams } from 'react-router';
 import '../sass/AboutAnimal.scss';
+import type { IAnimalExt } from '../models/Animals';
 
 export const AboutAnimal = () => {
   const [animalById, setAnimalById] = useState<IAnimalExt>();
