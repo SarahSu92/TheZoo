@@ -1,11 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import type { Animals } from '../models/Animals';
 import '../sass/Animals.scss';
 import { Link } from 'react-router';
+import { AnimalContext } from '../context/AnimalContext';
+import { AnimalFedActionTypes } from '../reducers/AnimalReducer';
 
 
 export const Animal = () => {
   const [animals, setAnimals] = useState<Animals[]>([]);
+  const { animalfeds, dispatch } = useContext(AnimalContext);
 
   useEffect(() => {
     const getAnimals = async () => {
@@ -40,6 +43,17 @@ export const Animal = () => {
           <Link to={`/AboutAnimal/${a.id}`} className='link'>
             <h3>Besök {a.name}</h3>
           </Link>
+           <p>
+          Status: {animalfeds.find((f) => f.id === a.id)?.status || 'Okänt'}
+        </p>
+          <button
+          onClick={() =>
+            dispatch({ type: AnimalFedActionTypes.FedMe, payload: String(a.id) })
+          }
+          disabled={animalfeds.find((f) => f.id === a.id)?.status !== 'Mata mig'}
+        >
+        Mata 
+        </button>
         </div>
       ))}
     </div>

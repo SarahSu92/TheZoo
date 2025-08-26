@@ -38,7 +38,6 @@ export const AboutAnimal = () => {
     <p>Födelseår {animalById?.yearOfBirth}</p>
     <h2>Om {animalById?.name}</h2>
     <p>{animalById?.longDescription}</p>
-    <button>Mata {animalById?.name}</button>
      </div>
   </div>
  

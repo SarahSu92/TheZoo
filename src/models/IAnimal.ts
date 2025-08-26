@@ -1,5 +1,5 @@
 export interface IAnimal {
-     id: number;
+    id: number;
     name: string;
     latinName: string;
     yearOfBirth: number;
@@ -12,4 +12,5 @@ export interface IAnimalExt extends IAnimal {
     medicine: string;
     isFed: boolean;
     lastFed: string;
+    beenFed: string;
 }

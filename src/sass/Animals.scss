@@ -10,7 +10,7 @@
 }
 
 .animal-frame {
-    display: flex;
+     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 1rem;
@@ -49,4 +49,20 @@ h3 {
     transform: scale(1.1);
 
   }
+}
+
+button {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid #000;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #96c93d; 
+    transition: transform 0.2s ease, background 0.3s ease;
+    font-weight: bold;
+
+}
+
+ button:hover { 
+    transform: scale(1.1);
 }
