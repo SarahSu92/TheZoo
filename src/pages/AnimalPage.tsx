@@ -13,7 +13,7 @@ export const Animal = () => {
   const getStatus = (lastFed: string) => {
     const now = Date.now();
     const fedTime = new Date(lastFed).getTime();
-    const diffHours = (now - fedTime) / 1000 / 60 / 60; // timmar
+    const diffHours = (now - fedTime) / 1000 / 60 / 60; 
 
     if (diffHours >= 4) {
       return { status: 'Mata mig', canFeed: true };
@@ -34,7 +34,7 @@ export const Animal = () => {
       setAnimals(
         animals.map((a: Animals) => ({
           ...a,
-          lastFed: new Date().toISOString(), // startvärde
+          lastFed: new Date().toISOString(),
         }))
       );
     };
