@@ -28,10 +28,12 @@ export const Animal = () => {
   return (
     <div className="container">
       {animals.map((a) => (
+        
         <div className="animal-frame" key={a.id}>
           <h2>{a.name}</h2>
+          
 
-          <img
+          <img className='animalp'
             src={a.imageUrl}
             alt={`Bild på ${a.name}, som heter ${a.latinName} på latin. ${a.shortDescription}`}
             onError={(e) => {
@@ -44,7 +46,7 @@ export const Animal = () => {
             <h3>Besök {a.name}</h3>
           </Link>
            <p>
-          Status: {animalfeds.find((f) => f.id === a.id)?.status || 'Okänt'}
+          Status: {animalfeds.find((f) => f.id === a.id)?.status || 'Senast matad'}
         </p>
           <button
           onClick={() =>

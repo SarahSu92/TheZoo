@@ -3,14 +3,14 @@
     grid-template-columns: repeat(1, 1fr);
     gap: 1rem;
     width: 80vw;
-    margin: 0 auto;
+    margin: 0 auto;  
+    margin-top: 1rem;
     
-    
-
 }
 
+
 .animal-frame {
-     display: flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     padding: 1rem;
@@ -20,7 +20,7 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-img {
+.animalp {
     max-width: 100%;
     height: auto;
     border-radius: 10px;
@@ -30,6 +30,11 @@ img {
 
 p {
     font-size: 1rem;
+}
+
+h2 {
+    margin: 0;
+    padding: 1rem;
 }
 
 h3 {

@@ -27,7 +27,7 @@ export const AboutAnimal = () => {
   <div className="about-container">
     <div className="about-animal">
     <h1>{animalById?.name}</h1>
-    <img
+    <img className="animalp"
             src={animalById?.imageUrl}
             alt={`Bild på ${animalById?.name}, som heter ${animalById?.latinName} på latin. ${animalById?.shortDescription}`}
             onError={(e) => {
