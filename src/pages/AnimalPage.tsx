@@ -9,6 +9,21 @@ export const Animal = () => {
   const [animals, setAnimals] = useState<Animals[]>([]);
   const { dispatch } = useContext(AnimalContext);
 
+  //status to feed
+  const getStatus = (lastFed: string) => {
+    const now = Date.now();
+    const fedTime = new Date(lastFed).getTime();
+    const diffHours = (now - fedTime) / 1000 / 60 / 60; // timmar
+
+    if (diffHours >= 4) {
+      return { status: 'Mata mig', canFeed: true };
+    }
+    if (diffHours >= 3) {
+      return { status: 'Börjar bli hungrig', canFeed: false };
+    }
+    return { status: 'Matad', canFeed: false };
+  };
+
   //fetch animals from api
   useEffect(() => {
     const getAnimals = async () => {
@@ -16,16 +31,23 @@ export const Animal = () => {
         'https://animals.azurewebsites.net/api/animals'
       );
       const animals = await response.json();
-      setAnimals(animals);
+      setAnimals(
+        animals.map((a: Animals) => ({
+          ...a,
+          lastFed: new Date().toISOString(), // startvärde
+        }))
+      );
     };
 
     if (animals.length > 0) return;
     getAnimals();
-  });
+  }, [animals.length]);
 
   return (
     <div className="container">
       {animals.map((a) => {
+        const { status, canFeed } = getStatus(a.lastFed);
+
         return (
           <div className="animal-frame" key={a.id}>
             <h2>{a.name}</h2>
@@ -42,15 +64,17 @@ export const Animal = () => {
             <Link to={`/AboutAnimal/${a.id}`} className="link">
               <h3>Besök {a.name}</h3>
             </Link>
-            
+
+            <p>Status: {status}</p>
+
             <button
               onClick={() =>
                 dispatch({
                   type: AnimalFedActionTypes.FedMe,
-                  payload: a.id, 
+                  payload: a.id,
                 })
               }
-              disabled={a.status === 'Matad'} 
+              disabled={!canFeed}
             >
               Mata
             </button>
