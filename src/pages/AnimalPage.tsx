@@ -23,30 +23,33 @@ export const Animal = () => {
     getAnimals();
   });
 
-  //handle button
-  const handleFeed = (animalId: number) => {
-    dispatch({
-      type: AnimalFedActionTypes.FedMe,
-      payload: String(animalId),
-    });
+  
+   const getStatus = (lastFed?: Date) => {
+    if (!lastFed) return { status: 'Mata mig', color: 'red', warning: 'Behöver matas nu!', canFeed: true };
+
+    const hours = (Date.now() - lastFed.getTime()) / (1000 * 60); // 1 minut = 1 "timme" för test
+    let status: 'Matad' | 'Börjar bli hungrig' | 'Mata mig' = 'Matad';
+    let color = 'green';
+    let warning = '';
+
+    if (hours >= 3 && hours < 4) {
+      status = 'Börjar bli hungrig';
+      color = 'orange';
+      warning = 'Snart behöver matas!';
+    } else if (hours >= 4) {
+      status = 'Mata mig';
+      color = 'red';
+      warning = 'Behöver matas nu!';
+    }
+
+    return { status, color, warning, canFeed: status === 'Mata mig' };
   };
 
   return (
     <div className="container">
       {animals.map((a) => {
-        const fed = animalfeds.find((f) => f.id === a.id);
-
-        const status = fed?.status || 'Matad';
-        let color = 'green';
-        let warning = '';
-
-        if (status === 'Börjar bli hungrig') {
-          color = 'orange';
-          warning = 'Snart behöver matas!';
-        } else if (status === 'Mata mig') {
-          color = 'red';
-          warning = 'Behöver matas nu!';
-        }
+        const fed = animalfeds.find(f => f.id === a.id);
+        const { status, color, warning, canFeed } = getStatus(fed?.lastFed);
 
         return (
           <div className="animal-frame" key={a.id}>
@@ -54,7 +57,7 @@ export const Animal = () => {
             <img
               className="animalp"
               src={a.imageUrl}
-              alt={`Bild på ${a.name}, som heter ${a.latinName} på latin. ${a.shortDescription}`}
+              alt={`Bild på ${a.name}`}
               onError={(e) => (e.currentTarget.src = '/No-Image-Placeholder.svg')}
             />
             <p>{a.shortDescription}</p>
@@ -67,8 +70,8 @@ export const Animal = () => {
             {warning && <p style={{ color, fontWeight: 'bold' }}>{warning}</p>}
 
             <button
-              onClick={() => handleFeed(a.id)}
-              disabled={status !== 'Mata mig'}
+              onClick={() => dispatch({ type: AnimalFedActionTypes.FedMe, payload: String(a.id) })}
+              disabled={!canFeed}
             >
               Mata
             </button>
