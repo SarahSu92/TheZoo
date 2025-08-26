@@ -37,7 +37,7 @@ export const AboutAnimal = () => {
     <p>Latinska namnet: {animalById?.latinName}</p>
     <p>Födelseår {animalById?.yearOfBirth}</p>
     <h2>Om {animalById?.name}</h2>
-    <p>{animalById?.longDescription}</p>
+    <p className="description">{animalById?.longDescription}</p>
      </div>
   </div>
  
