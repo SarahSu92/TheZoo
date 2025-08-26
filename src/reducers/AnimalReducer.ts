@@ -9,6 +9,9 @@ export type AnimalFeds = {
   name: string;
   lastFed: Date;
   status: 'Matad' | 'Börjar bli hungrig' | 'Mata mig';
+  imageUrl: string;
+  shortDescription:string;
+  yearOfBirth: number;
 };
 
 export type AnimalFedAction =

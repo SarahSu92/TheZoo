@@ -6,4 +6,5 @@ export type Animals = {
     shortDescription: string;
     longDescription: string;
     imageUrl: string;
+    lastFed: string;
 }
