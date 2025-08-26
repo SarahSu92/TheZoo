@@ -43,7 +43,7 @@ export const AnimalReducer = (
                 lastFed: new Date(),
                 status: calculateStatus(new Date()),
               }
-            : { ...animal, status: calculateStatus(animal.lastFed) } // uppdatera status för alla djur
+            : { ...animal, status: calculateStatus(animal.lastFed) } 
       );
     case AnimalFedActionTypes.Hungry:
     case AnimalFedActionTypes.BeenFed:

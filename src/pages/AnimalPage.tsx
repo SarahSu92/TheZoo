@@ -5,7 +5,6 @@ import { Link } from 'react-router';
 import { AnimalContext } from '../context/AnimalContext';
 import { AnimalFedActionTypes } from '../reducers/AnimalReducer';
 
-
 export const Animal = () => {
   const [animals, setAnimals] = useState<Animals[]>([]);
   const { animalfeds, dispatch } = useContext(AnimalContext);
@@ -26,40 +25,40 @@ export const Animal = () => {
 
   //Update tick every minute
   useEffect(() => {
-    const interval = setInterval(() => setTick(t => t + 1), 60 * 1000); // 1 minut
+    const interval = setInterval(() => setTick((t) => t + 1), 60 * 1000); // 1 minut
     return () => clearInterval(interval);
   }, []);
 
-  //function to count status
-  const getStatus = (animalId: number) => {
-    const a = animalfeds.find(f => f.id === animalId);
-    if (!a) return { status: 'Senast matad', canFeed: false };
+  // Räkna status baserat på lastFed
+  const getStatus = (lastFed: Date) => {
+    const hours = (Date.now() - new Date(lastFed).getTime()) / (1000 * 60 * 60);
+    let status: 'Matad' | 'Börjar bli hungrig' | 'Mata mig' = 'Matad';
+    let color = 'green';
+    let warning = '';
 
-    const hoursSinceFed = (Date.now() - new Date(a.lastFed).getTime()) / (1000 * 60 * 60);
-    let status: typeof a.status = 'Matad';
-    if (hoursSinceFed >= 3 && hoursSinceFed < 4) status = 'Börjar bli hungrig';
-    if (hoursSinceFed >= 4) status = 'Mata mig';
-    const canFeed = status === 'Mata mig';
+    if (hours >= 3 && hours < 4) {
+      status = 'Börjar bli hungrig';
+      color = 'orange';
+      warning = 'Snart behöver matas!';
+    } else if (hours >= 4) {
+      status = 'Mata mig';
+      color = 'red';
+      warning = 'Behöver matas nu!';
+    }
 
-    return { status, canFeed };
+    return { status, color, warning, canFeed: status === 'Mata mig' };
   };
-
-
 
   return (
     <div className="container">
       {animals.map((a) => {
-        const { status, canFeed } = getStatus(a.id);
+        const fed = animalfeds.find((f) => f.id === a.id);
+        const lastFed = fed?.lastFed || new Date(0); // fallback
+        const { status, color, warning, canFeed } = getStatus(
+          new Date(lastFed)
+        );
 
-         let color = 'green';
-        let warning = '';
-        if (status === 'Börjar bli hungrig') {
-          color = 'orange';
-          warning = 'Snart behöver matas!';
-        } else if (status === 'Mata mig') {
-          color = 'red';
-          warning = 'Behöver matas nu!';
-        }
+    
 
         return (
           <div className="animal-frame" key={a.id}>
@@ -68,19 +67,23 @@ export const Animal = () => {
               className="animalp"
               src={a.imageUrl}
               alt={`Bild på ${a.name}, som heter ${a.latinName} på latin. ${a.shortDescription}`}
-              onError={(e) => (e.currentTarget.src = '/No-Image-Placeholder.svg')}
+              onError={(e) =>
+                (e.currentTarget.src = '/No-Image-Placeholder.svg')
+              }
             />
             <p>{a.shortDescription}</p>
             <p>Födelseår: {a.yearOfBirth}</p>
             <Link to={`/AboutAnimal/${a.id}`} className="link">
               <h3>Besök {a.name}</h3>
             </Link>
-
             Status: <strong style={{ color }}>{status}</strong>
             {warning && <p style={{ color, fontWeight: 'bold' }}>{warning}</p>}
             <button
               onClick={() =>
-                dispatch({ type: AnimalFedActionTypes.FedMe, payload: String(a.id) })
+                dispatch({
+                  type: AnimalFedActionTypes.FedMe,
+                  payload: String(a.id),
+                })
               }
               disabled={!canFeed} //button is active when canfeed is true
             >
