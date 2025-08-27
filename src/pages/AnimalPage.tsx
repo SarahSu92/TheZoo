@@ -1,52 +1,56 @@
-import { useContext, useEffect, useState } from 'react';
-import type { Animals } from '../models/Animals';
-import '../sass/Animals.scss';
-import { Link } from 'react-router';
-import { AnimalContext } from '../context/AnimalContext';
-import { AnimalFedActionTypes } from '../reducers/AnimalReducer';
+import { useEffect, useState } from "react";
+import type { Animals } from "../models/Animals";
+import "../sass/Animals.scss";
+import { Link } from "react-router";
 
 export const Animal = () => {
   const [animals, setAnimals] = useState<Animals[]>([]);
-  const { dispatch } = useContext(AnimalContext);
 
-  //status to feed
+  // Status & rules
   const getStatus = (lastFed: string) => {
     const now = Date.now();
     const fedTime = new Date(lastFed).getTime();
-    const diffHours = (now - fedTime) / 1000 / 60 / 60; 
+    const diffHours = (now - fedTime) / 1000 / 60 / 60;
 
-    if (diffHours >= 4) {
-      return { status: 'Mata mig', canFeed: true };
+    if (diffHours >= 5) {
+      return { status: "⛔ Nu behöver djuret matas!", canFeed: true, className: "danger" };
     }
     if (diffHours >= 3) {
-      return { status: 'Börjar bli hungrig', canFeed: false };
+      return { status: "⚠️ Djuret behöver snart matas", canFeed: false, className: "warning" };
     }
-    return { status: 'Matad', canFeed: false };
+    return {
+      status: `✅ Mätt – matades senast ${new Date(lastFed).toLocaleTimeString()}`,
+      canFeed: false,
+      className: "ok",
+    };
   };
 
-  //fetch animals from api
+  //Fetch animals from api
   useEffect(() => {
     const getAnimals = async () => {
       const response = await fetch(
-        'https://animals.azurewebsites.net/api/animals'
+        "https://animals.azurewebsites.net/api/animals"
       );
       const animals = await response.json();
-      setAnimals(
-        animals.map((a: Animals) => ({
-          ...a,
-          lastFed: new Date().toISOString(),
-        }))
-      );
+      setAnimals(animals);
     };
 
-    if (animals.length > 0) return;
-    getAnimals();
+    if (animals.length === 0) getAnimals();
   }, [animals.length]);
+
+  // Feed animals
+  const feedAnimal = (id: number) => {
+    setAnimals((prev) =>
+      prev.map((a) =>
+        a.id === id ? { ...a, lastFed: new Date().toISOString() } : a
+      )
+    );
+  };
 
   return (
     <div className="container">
       {animals.map((a) => {
-        const { status, canFeed } = getStatus(a.lastFed);
+        const { status, canFeed, className } = getStatus(a.lastFed);
 
         return (
           <div className="animal-frame" key={a.id}>
@@ -56,7 +60,7 @@ export const Animal = () => {
               src={a.imageUrl}
               alt={`Bild på ${a.name}`}
               onError={(e) =>
-                (e.currentTarget.src = '/No-Image-Placeholder.svg')
+                (e.currentTarget.src = "/No-Image-Placeholder.svg")
               }
             />
             <p>{a.shortDescription}</p>
@@ -65,16 +69,14 @@ export const Animal = () => {
               <h3>Besök {a.name}</h3>
             </Link>
 
-            <p>Status: {status}</p>
+           
+            <p className={`animal-status ${className}`}>{status}</p>
 
+           
             <button
-              onClick={() =>
-                dispatch({
-                  type: AnimalFedActionTypes.FedMe,
-                  payload: a.id,
-                })
-              }
+              onClick={() => feedAnimal(a.id)}
               disabled={!canFeed}
+              className={canFeed ? "feed-btn" : "feed-btn disabled"}
             >
               Mata
             </button>
