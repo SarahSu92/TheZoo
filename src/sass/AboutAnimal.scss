@@ -36,3 +36,39 @@ p {
     
 }
 
+.animal-status {
+  font-weight: bold;
+  margin: 0.5rem 0;
+
+  &.ok {
+    color: #2e7d32; // grön
+  }
+  &.warning {
+    color: #f9a825; // gul/orange
+  }
+  &.danger {
+    color: #c62828; // röd
+  }
+}
+
+.feed-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: #17631a; 
+  color: white;
+  transition: background 0.2s;
+
+  &:hover:enabled {
+    background-color: #45a049;
+  }
+
+  &.disabled {
+    background-color: #ccc; 
+    color: #666;
+    cursor: not-allowed;
+  }
+}
