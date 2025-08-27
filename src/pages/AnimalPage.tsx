@@ -53,24 +53,11 @@ export const Animal = () => {
     if (animals.length === 0) getAnimals();
   }, [animals.length]);
 
-  // Feed animal -> update localstorage
-  const feedAnimal = (id: number) => {
-    const now = new Date().toISOString();
-    setAnimals((prev) =>
-      prev.map((a) => (a.id === id ? { ...a, lastFed: now } : a))
-    );
-
-    const stored = JSON.parse(localStorage.getItem("fedAnimals") || "{}");
-    localStorage.setItem(
-      "fedAnimals",
-      JSON.stringify({ ...stored, [id]: now })
-    );
-  };
 
   return (
     <div className="container">
       {animals.map((a) => {
-        const { status, canFeed, className } = getStatus(a.lastFed);
+        const { status, className } = getStatus(a.lastFed);
 
         return (
           <div className="animal-frame" key={a.id}>
@@ -92,14 +79,6 @@ export const Animal = () => {
             {/* Status-text */}
             <p className={`animal-status ${className}`}>{status}</p>
 
-            {/* Btn */}
-            <button
-              onClick={() => feedAnimal(a.id)}
-              disabled={!canFeed}
-              className={canFeed ? "feed-btn" : "feed-btn disabled"}
-            >
-              Mata
-            </button>
           </div>
         );
       })}
