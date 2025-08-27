@@ -1,53 +1,67 @@
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
-import '../sass/AboutAnimal.scss';
-import type { IAnimalExt } from '../models/Animals';
+import { useEffect, useState } from "react";
+import { useParams } from "react-router";
+import "../sass/AboutAnimal.scss";
+import type { IAnimalExt } from "../models/Animals";
 
 export const AboutAnimal = () => {
   const [animalById, setAnimalById] = useState<IAnimalExt>();
   const { id } = useParams();
 
-  // Fetch animals from api
+  // HFetch animal from api -> localstorage
   useEffect(() => {
     const getAnimalById = async () => {
       const response = await fetch(
-        'https://animals.azurewebsites.net/api/animals/' + id
+        "https://animals.azurewebsites.net/api/animals/" + id
       );
       const data: IAnimalExt = await response.json();
+
+      const stored = JSON.parse(localStorage.getItem("fedAnimals") || "{}");
+      if (stored[data.id]) data.lastFed = stored[data.id];
+
       setAnimalById(data);
     };
 
     if (!animalById) getAnimalById();
   }, [animalById, id]);
 
-  // Calculate when was the last time been fed
-  const diffHours = (() => {
-    if (!animalById?.lastFed) return 999; // big value = long time ago
-    return (
-      (Date.now() - new Date(animalById.lastFed).getTime()) / 1000 / 60 / 60
-    );
-  })();
+  // Calculate hours when feed
+  const diffHours = animalById?.lastFed
+    ? (Date.now() - new Date(animalById.lastFed).getTime()) / 1000 / 60 / 60
+    : 999;
 
   // Rules
-  const canFeed = diffHours >= 4; // 1 & 2
-  const needsAttention = diffHours >= 3 && diffHours < 4; //  3
+  const canFeed = diffHours >= 4;
+  const needsAttention = diffHours >= 3 && diffHours < 4;
 
   // Status-text
-  let statusText = '';
-  let statusClass = '';
+  let statusText = "";
+  let statusClass = "";
 
   if (diffHours < 3) {
-    statusText = `Mätt – matades senast ${new Date(
+    statusText = `✅ Mätt – matades senast ${new Date(
       animalById!.lastFed
     ).toLocaleTimeString()}`;
-    statusClass = 'ok';
+    statusClass = "ok";
   } else if (needsAttention) {
-    statusText = '⚠️ Djuret behöver snart matas';
-    statusClass = 'warning';
+    statusText = "⚠️ Djuret behöver snart matas";
+    statusClass = "warning";
   } else if (diffHours >= 4) {
-    statusText = '⛔ Djuret behöver matas nu!';
-    statusClass = 'danger';
+    statusText = "⛔ Djuret behöver matas nu!";
+    statusClass = "danger";
   }
+
+  // Feed animal -> update localstorage
+  const feedAnimal = () => {
+    if (!animalById) return;
+    const now = new Date().toISOString();
+    setAnimalById({ ...animalById, lastFed: now });
+
+    const stored = JSON.parse(localStorage.getItem("fedAnimals") || "{}");
+    localStorage.setItem(
+      "fedAnimals",
+      JSON.stringify({ ...stored, [animalById.id]: now })
+    );
+  };
 
   return (
     <div className="about-container">
@@ -58,7 +72,7 @@ export const AboutAnimal = () => {
           src={animalById?.imageUrl}
           alt={`Bild på ${animalById?.name}`}
           onError={(e) => {
-            e.currentTarget.src = '/No-Image-Placeholder.svg';
+            e.currentTarget.src = "/No-Image-Placeholder.svg";
           }}
         />
         <p>Latinska namnet: {animalById?.latinName}</p>
@@ -67,19 +81,14 @@ export const AboutAnimal = () => {
         <h2>Om {animalById?.name}</h2>
         <p className="description">{animalById?.longDescription}</p>
 
+        {/* Status-text */}
         <p className={`animal-status ${statusClass}`}>{statusText}</p>
 
+        {/* Btn */}
         <button
+          onClick={feedAnimal}
           disabled={!canFeed}
-          className={canFeed ? 'feed-btn' : 'feed-btn disabled'}
-          onClick={() => {
-            if (animalById) {
-              setAnimalById({
-                ...animalById,
-                lastFed: new Date().toISOString(), // update local
-              });
-            }
-          }}
+          className={canFeed ? "feed-btn" : "feed-btn disabled"}
         >
           Mata
         </button>
