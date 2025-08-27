@@ -1,46 +1,34 @@
-import type { AnimalFeds } from "../models/Animals";
-import { saveAnimalsToLocalStorage } from "../helpers/saveAnimalsToLocalStorage";
+// reducers/AnimalReducer.ts
+import type { Animals } from "../models/Animals";
 
 export enum AnimalFedActionTypes {
-  FedMe,
-  SetAnimals,
+  FedMe = "FedMe",
+  SetAnimals = "SetAnimals",
 }
 
-export type AnimalFedAction =
+export type AnimalAction =
   | { type: AnimalFedActionTypes.FedMe; payload: number }
-  | { type: AnimalFedActionTypes.SetAnimals; payload: AnimalFeds[] };
+  | { type: AnimalFedActionTypes.SetAnimals; payload: Animals[] };
 
-export const calculateStatus = (lastFed: string): AnimalFeds["status"] => {
-  const diffHours = (Date.now() - new Date(lastFed).getTime()) / 1000 / 60 / 60;
-
-  if (diffHours >= 4) return "Mata mig";
-  if (diffHours >= 3) return "Börjar bli hungrig";
-  return "Matad";
+export type AnimalState = {
+  animals: Animals[];
 };
 
-export const AnimalReducer = (
-  state: AnimalFeds[],
-  action: AnimalFedAction
-): AnimalFeds[] => {
+export const animalReducer = (
+  state: AnimalState,
+  action: AnimalAction
+): AnimalState => {
   switch (action.type) {
+    case AnimalFedActionTypes.FedMe:
+      { const now = new Date().toISOString();
+      return {
+        ...state,
+        animals: state.animals.map((a) =>
+          a.id === action.payload ? { ...a, lastFed: now } : a
+        ),
+      }; }
     case AnimalFedActionTypes.SetAnimals:
-      saveAnimalsToLocalStorage(JSON.stringify(action.payload));
-      return action.payload;
-
-    case AnimalFedActionTypes.FedMe: {
-  const updated = state.map((animal) =>
-    animal.id === action.payload
-      ? {
-          ...animal,
-          lastFed: new Date().toISOString(),
-          status: "Matad" as AnimalFeds["status"],
-        }
-      : { ...animal, status: calculateStatus(animal.lastFed) }
-  );
-  saveAnimalsToLocalStorage(JSON.stringify(updated));
-  return updated;
-}
-
+      return { ...state, animals: action.payload };
     default:
       return state;
   }
