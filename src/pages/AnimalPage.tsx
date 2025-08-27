@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import type { Animals } from '../models/Animals';
-import '../sass/Animals.scss';
-import { Link } from 'react-router';
+import { useEffect, useState } from "react";
+import type { Animals } from "../models/Animals";
+import "../sass/Animals.scss";
+import { Link } from "react-router";
 
 export const Animal = () => {
   const [animals, setAnimals] = useState<Animals[]>([]);
@@ -14,44 +14,63 @@ export const Animal = () => {
 
     if (diffHours >= 5) {
       return {
-        status: '⛔ Nu behöver djuret matas!',
+        status: "⛔ Nu behöver djuret matas!",
         canFeed: true,
-        className: 'danger',
+        className: "danger",
       };
     }
     if (diffHours >= 3) {
       return {
-        status: '⚠️ Djuret behöver snart matas',
+        status: "⚠️ Djuret behöver snart matas",
         canFeed: false,
-        className: 'warning',
+        className: "warning",
       };
     }
     return {
-      status: `✅ Mätt – matades senast ${new Date(
-        lastFed
-      ).toLocaleTimeString()}`,
+      status: `✅ Mätt – matades senast ${new Date(lastFed).toLocaleTimeString()}`,
       canFeed: false,
-      className: 'ok',
+      className: "ok",
     };
   };
 
-  //Fetch animals from api
+  // Feed animal check localstorage
   useEffect(() => {
     const getAnimals = async () => {
       const response = await fetch(
-        'https://animals.azurewebsites.net/api/animals'
+        "https://animals.azurewebsites.net/api/animals"
       );
-      const animals = await response.json();
+      let animals = await response.json();
+
+      const stored = JSON.parse(localStorage.getItem("fedAnimals") || "{}");
+      animals = animals.map((a: Animals) => ({
+        ...a,
+        lastFed: stored[a.id] || a.lastFed,
+      }));
+
       setAnimals(animals);
     };
 
     if (animals.length === 0) getAnimals();
   }, [animals.length]);
 
+  // Feed animal -> update localstorage
+  const feedAnimal = (id: number) => {
+    const now = new Date().toISOString();
+    setAnimals((prev) =>
+      prev.map((a) => (a.id === id ? { ...a, lastFed: now } : a))
+    );
+
+    const stored = JSON.parse(localStorage.getItem("fedAnimals") || "{}");
+    localStorage.setItem(
+      "fedAnimals",
+      JSON.stringify({ ...stored, [id]: now })
+    );
+  };
+
   return (
     <div className="container">
       {animals.map((a) => {
-        const { status, className } = getStatus(a.lastFed);
+        const { status, canFeed, className } = getStatus(a.lastFed);
 
         return (
           <div className="animal-frame" key={a.id}>
@@ -61,7 +80,7 @@ export const Animal = () => {
               src={a.imageUrl}
               alt={`Bild på ${a.name}`}
               onError={(e) =>
-                (e.currentTarget.src = '/No-Image-Placeholder.svg')
+                (e.currentTarget.src = "/No-Image-Placeholder.svg")
               }
             />
             <p>{a.shortDescription}</p>
@@ -70,7 +89,17 @@ export const Animal = () => {
               <h3>Besök {a.name}</h3>
             </Link>
 
+            {/* Status-text */}
             <p className={`animal-status ${className}`}>{status}</p>
+
+            {/* Btn */}
+            <button
+              onClick={() => feedAnimal(a.id)}
+              disabled={!canFeed}
+              className={canFeed ? "feed-btn" : "feed-btn disabled"}
+            >
+              Mata
+            </button>
           </div>
         );
       })}
