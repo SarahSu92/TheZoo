@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
-import type { Animals } from "../models/Animals";
-import "../sass/Animals.scss";
-import { Link } from "react-router";
+import { useContext, useEffect } from 'react';
+import type { Animals } from '../models/Animals';
+import '../sass/Animals.scss';
+import { Link } from 'react-router';
+import { AnimalContext } from '../context/AnimalContext';
+import { AnimalFedActionTypes } from '../reducers/AnimalReducer';
 
 export const Animal = () => {
-  const [animals, setAnimals] = useState<Animals[]>([]);
+  const {state, dispatch} = useContext(AnimalContext);
 
   // Status & rules
   const getStatus = (lastFed: string) => {
@@ -14,50 +16,44 @@ export const Animal = () => {
 
     if (diffHours >= 5) {
       return {
-        status: "⛔ Nu behöver djuret matas!",
+        status: '⛔ Nu behöver djuret matas!',
         canFeed: true,
-        className: "danger",
+        className: 'danger',
       };
     }
     if (diffHours >= 3) {
       return {
-        status: "⚠️ Djuret behöver snart matas",
+        status: '⚠️ Djuret behöver snart matas',
         canFeed: false,
-        className: "warning",
+        className: 'warning',
       };
     }
     return {
-      status: `✅ Mätt – matades senast ${new Date(lastFed).toLocaleTimeString()}`,
+      status: `✅ Mätt – matades senast ${new Date(
+        lastFed
+      ).toLocaleTimeString()}`,
       canFeed: false,
-      className: "ok",
+      className: 'ok',
     };
   };
 
-  // Feed animal check localstorage
+  // Fetch animals if context dosent exist
   useEffect(() => {
     const getAnimals = async () => {
       const response = await fetch(
-        "https://animals.azurewebsites.net/api/animals"
+        'https://animals.azurewebsites.net/api/animals'
       );
-      let animals = await response.json();
-
-      const stored = JSON.parse(localStorage.getItem("fedAnimals") || "{}");
-      animals = animals.map((a: Animals) => ({
-        ...a,
-        lastFed: stored[a.id] || a.lastFed,
-      }));
-
-      setAnimals(animals);
+      const animals: Animals[] = await response.json();
+      dispatch({ type: AnimalFedActionTypes.SetAnimals, payload: animals });
     };
 
-    if (animals.length === 0) getAnimals();
-  }, [animals.length]);
-
+    if (state.animals.length === 0) getAnimals();
+  }, [state.animals.length, dispatch]);
 
   return (
     <div className="container">
-      {animals.map((a) => {
-        const { status, className } = getStatus(a.lastFed);
+      {state.animals.map((a) => {
+        const { status, className} = getStatus(a.lastFed);
 
         return (
           <div className="animal-frame" key={a.id}>
@@ -67,7 +63,7 @@ export const Animal = () => {
               src={a.imageUrl}
               alt={`Bild på ${a.name}`}
               onError={(e) =>
-                (e.currentTarget.src = "/No-Image-Placeholder.svg")
+                (e.currentTarget.src = '/No-Image-Placeholder.svg')
               }
             />
             <p>{a.shortDescription}</p>
@@ -78,7 +74,6 @@ export const Animal = () => {
 
             {/* Status-text */}
             <p className={`animal-status ${className}`}>{status}</p>
-
           </div>
         );
       })}

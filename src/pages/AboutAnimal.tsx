@@ -1,31 +1,40 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router";
 import "../sass/AboutAnimal.scss";
-import type { IAnimalExt } from "../models/Animals";
+import type { Animals } from "../models/Animals";
+import { AnimalContext } from "../context/AnimalContext";
+import { AnimalFedActionTypes } from "../reducers/AnimalReducer";
 
 export const AboutAnimal = () => {
-  const [animalById, setAnimalById] = useState<IAnimalExt>();
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
+  const { state, dispatch } = useContext(AnimalContext);
+  const [animalById, setAnimalById] = useState<Animals | null>(null);
 
-  // HFetch animal from api -> localstorage
+  // Fetch animal from api if context dosent exist
   useEffect(() => {
-    const getAnimalById = async () => {
-      const response = await fetch(
-        "https://animals.azurewebsites.net/api/animals/" + id
-      );
-      const data: IAnimalExt = await response.json();
+    const found = state.animals.find((a) => a.id === Number(id));
+    if (found) {
+      setAnimalById(found);
+    } else {
+      const getAnimal = async () => {
+        const response = await fetch(
+          `https://animals.azurewebsites.net/api/animals/${id}`
+        );
+        const data: Animals = await response.json();
+        setAnimalById(data);
+        dispatch({
+          type: AnimalFedActionTypes.SetAnimals,
+          payload: [...state.animals, data],
+        });
+      };
+      getAnimal();
+    }
+  }, [id, state.animals, dispatch]);
 
-      const stored = JSON.parse(localStorage.getItem("fedAnimals") || "{}");
-      if (stored[data.id]) data.lastFed = stored[data.id];
+  if (!animalById) return <p>Laddar...</p>;
 
-      setAnimalById(data);
-    };
-
-    if (!animalById) getAnimalById();
-  }, [animalById, id]);
-
-  // Calculate hours when feed
-  const diffHours = animalById?.lastFed
+  // Calculate hours since been fed
+  const diffHours = animalById.lastFed
     ? (Date.now() - new Date(animalById.lastFed).getTime()) / 1000 / 60 / 60
     : 999;
 
@@ -39,7 +48,7 @@ export const AboutAnimal = () => {
 
   if (diffHours < 3) {
     statusText = `✅ Mätt – matades senast ${new Date(
-      animalById!.lastFed
+      animalById.lastFed
     ).toLocaleTimeString()}`;
     statusClass = "ok";
   } else if (needsAttention) {
@@ -50,36 +59,35 @@ export const AboutAnimal = () => {
     statusClass = "danger";
   }
 
-  // Feed animal -> update localstorage
+  // Feed animal -> update localstate
   const feedAnimal = () => {
     if (!animalById) return;
     const now = new Date().toISOString();
+    dispatch({
+      type: AnimalFedActionTypes.FedMe,
+      payload: animalById.id,
+    });
+    
     setAnimalById({ ...animalById, lastFed: now });
-
-    const stored = JSON.parse(localStorage.getItem("fedAnimals") || "{}");
-    localStorage.setItem(
-      "fedAnimals",
-      JSON.stringify({ ...stored, [animalById.id]: now })
-    );
   };
 
   return (
     <div className="about-container">
       <div className="about-animal">
-        <h1>{animalById?.name}</h1>
+        <h1>{animalById.name}</h1>
         <img
           className="animalp"
-          src={animalById?.imageUrl}
-          alt={`Bild på ${animalById?.name}`}
+          src={animalById.imageUrl}
+          alt={`Bild på ${animalById.name}`}
           onError={(e) => {
             e.currentTarget.src = "/No-Image-Placeholder.svg";
           }}
         />
-        <p>Latinska namnet: {animalById?.latinName}</p>
-        <p>Födelseår: {animalById?.yearOfBirth}</p>
+        <p>Latinska namnet: {animalById.latinName}</p>
+        <p>Födelseår: {animalById.yearOfBirth}</p>
 
-        <h2>Om {animalById?.name}</h2>
-        <p className="description">{animalById?.longDescription}</p>
+        <h2>Om {animalById.name}</h2>
+        <p className="description">{animalById.longDescription}</p>
 
         {/* Status-text */}
         <p className={`animal-status ${statusClass}`}>{statusText}</p>
