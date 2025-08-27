@@ -19,6 +19,9 @@ export const Footer = () => {
             <FaInstagram size={24} />
           </a>
         </li>
+        <li>
+           © 2025
+        </li>
      </ul>
     </footer>
     );
