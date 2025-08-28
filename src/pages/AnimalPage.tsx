@@ -6,23 +6,23 @@ import { AnimalContext } from '../context/AnimalContext';
 import { AnimalFedActionTypes } from '../reducers/AnimalReducer';
 
 export const Animal = () => {
-  const {state, dispatch} = useContext(AnimalContext);
+  const { state, dispatch } = useContext(AnimalContext);
 
   // Status & rules
   const getStatus = (lastFed: string) => {
-  const now = Date.now();
-  const fedTime = new Date(lastFed).getTime();
-  const diffHours = (now - fedTime) / 1000 / 60 / 60;
+    const now = Date.now();
+    const fedTime = new Date(lastFed).getTime();
+    const diffHours = (now - fedTime) / 1000 / 60 / 60;
 
-  // Formatera datum + tid
-  const fedDate = new Date(lastFed);
-  const formattedDateTime =
-    fedDate.toLocaleDateString("sv-SE", { dateStyle: "medium" }) +
-    " kl. " +
-    fedDate.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
-
-
-    
+    // Formatera datum + tid
+    const fedDate = new Date(lastFed);
+    const formattedDateTime =
+      fedDate.toLocaleDateString('sv-SE', { dateStyle: 'medium' }) +
+      ' kl. ' +
+      fedDate.toLocaleTimeString('sv-SE', {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
 
     if (diffHours >= 5) {
       return {
@@ -61,7 +61,7 @@ export const Animal = () => {
   return (
     <div className="container">
       {state.animals.map((a) => {
-        const { status, className} = getStatus(a.lastFed);
+        const { status, className } = getStatus(a.lastFed);
 
         return (
           <div className="animal-frame" key={a.id}>
