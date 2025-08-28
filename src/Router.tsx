@@ -24,6 +24,10 @@ export const Router = createBrowserRouter([
         path: '/AboutAnimal/:id',
         element: <AboutAnimal />,
       },
+      {
+        path: '/Animals',
+        element: <Animal />,
+      },
     ],
   },
 ]);

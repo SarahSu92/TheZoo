@@ -6,8 +6,8 @@ export const Error = () => {
       <h2 className='error-msg'>
         The page isn't working
         </h2>
-        <h3 className='error-msg'>
-        Please go to the home page
+        <h3 className='errormsg'>
+        Please return to the home page
         or try again.
         </h3>      
     </>
