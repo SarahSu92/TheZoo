@@ -1,14 +1,67 @@
-.heroimage {
-    width: 100%;
-    height: auto;
+@media screen and (min-width: 320px) {
+    .heroimage {
+        width: 100%;
+        height: auto;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .heroh1 {
+        text-align: center;
+        color: #ffffff;
+        margin-top: 4rem;
+        text-shadow:
+            2px 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 5px rgba(0, 0, 0, 0.5);
+
+
+    }
 }
 
-.heroh1 {
-    text-align: center;
-    color: #ffffff;
-    text-shadow: 
-        2px 2px 4px rgba(0, 0, 0, 0.9), 
-        0 0 5px rgba(0, 0, 0, 0.5);
 
-    
+@media screen and (min-width: 720px) {
+    .heroh1 {
+        text-align: center;
+        color: #ffffff;
+        margin-top: 1rem;
+        text-shadow:
+            2px 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 5px rgba(0, 0, 0, 0.5);
+
+
+    }
+
+    .heroimage {
+         width: auto;
+        height: 60vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
+@media screen and (min-width: 1024px) {
+    .heroimage {
+        width: auto;
+        height: 60vh;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .heroh1 {
+        text-align: center;
+        color: #ffffff;
+        margin-top: 2rem;
+        text-shadow:
+            2px 2px 4px rgba(0, 0, 0, 0.9),
+            0 0 5px rgba(0, 0, 0, 0.5);
+
+
+
+    }
 }
