@@ -10,28 +10,36 @@ export const Animal = () => {
 
   // Status & rules
   const getStatus = (lastFed: string) => {
-    const now = Date.now();
-    const fedTime = new Date(lastFed).getTime();
-    const diffHours = (now - fedTime) / 1000 / 60 / 60;
+  const now = Date.now();
+  const fedTime = new Date(lastFed).getTime();
+  const diffHours = (now - fedTime) / 1000 / 60 / 60;
+
+  // Formatera datum + tid
+  const fedDate = new Date(lastFed);
+  const formattedDateTime =
+    fedDate.toLocaleDateString("sv-SE", { dateStyle: "medium" }) +
+    " kl. " +
+    fedDate.toLocaleTimeString("sv-SE", { hour: "2-digit", minute: "2-digit" });
+
+
+    
 
     if (diffHours >= 5) {
       return {
-        status: '⛔ Nu behöver djuret matas!',
+        status: `⛔ Nu behöver djuret matas! - senast matad ${formattedDateTime}`,
         canFeed: true,
         className: 'danger',
       };
     }
     if (diffHours >= 3) {
       return {
-        status: '⚠️ Djuret behöver snart matas',
+        status: `⚠️ Djuret behöver snart matas – senast matad ${formattedDateTime}`,
         canFeed: false,
         className: 'warning',
       };
     }
     return {
-      status: `✅ Mätt – matades senast ${new Date(
-        lastFed
-      ).toLocaleTimeString()}`,
+      status: `✅ Mätt – matades senast ${formattedDateTime}`,
       canFeed: false,
       className: 'ok',
     };
