@@ -82,7 +82,7 @@ export const AboutAnimal = () => {
       <div className="about-animal">
         <h1>{animalById.name}</h1>
         <img
-          className="animalp"
+          className="about-animalp"
           src={animalById.imageUrl}
           alt={`Bild på ${animalById.name}`}
           onError={(e) => {
