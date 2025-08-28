@@ -26,7 +26,7 @@ export const Animal = () => {
 
     if (diffHours >= 5) {
       return {
-        status: `⛔ Nu behöver djuret matas! Senast matad 
+        status: `⛔ Behöver matas nu! Senast matad 
         ${formattedDateTime}`,
         canFeed: true,
         className: 'danger',
@@ -34,7 +34,7 @@ export const Animal = () => {
     }
     if (diffHours >= 3) {
       return {
-        status: `⚠️ Djuret behöver snart matas! Senast matad 
+        status: `⚠️ Börjar bli hungrig! Senast matad
         ${formattedDateTime}`,
         canFeed: false,
         className: 'warning',

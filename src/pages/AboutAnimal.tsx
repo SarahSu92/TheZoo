@@ -55,13 +55,13 @@ export const AboutAnimal = () => {
 
   // Status-text
   if (diffHours < 3) {
-    statusText = `✅ Mätt – matades senast ${formattedDateTime}`;
+    statusText = `✅ Mätt! Matades senast ${formattedDateTime}`;
     statusClass = 'ok';
   } else if (needsAttention) {
-    statusText = `⚠️ Djuret börjar bli hungrigt Senast matad den ${formattedDateTime}`;
+    statusText = `⚠️ Börjar bli hungrig. Senast matad den ${formattedDateTime}`;
     statusClass = 'warning';
   } else if (diffHours >= 4) {
-    statusText = `⛔ Djuret behöver matas nu! Senast matad den ${formattedDateTime}`;
+    statusText = `⛔ Behöver matas nu! Senast matad den ${formattedDateTime}`;
     statusClass = 'danger';
   }
 
