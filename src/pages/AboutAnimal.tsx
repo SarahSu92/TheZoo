@@ -1,9 +1,9 @@
-import { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router";
-import "../sass/AboutAnimal.scss";
-import type { Animals } from "../models/Animals";
-import { AnimalContext } from "../context/AnimalContext";
-import { AnimalFedActionTypes } from "../reducers/AnimalReducer";
+import { useEffect, useState, useContext } from 'react';
+import { useParams } from 'react-router';
+import '../sass/AboutAnimal.scss';
+import type { Animals } from '../models/Animals';
+import { AnimalContext } from '../context/AnimalContext';
+import { AnimalFedActionTypes } from '../reducers/AnimalReducer';
 
 export const AboutAnimal = () => {
   const { id } = useParams<{ id: string }>();
@@ -36,27 +36,37 @@ export const AboutAnimal = () => {
   // Calculate hours since been fed
   const diffHours = animalById.lastFed
     ? (Date.now() - new Date(animalById.lastFed).getTime()) / 1000 / 60 / 60
-    : 999;
+    : 999; //long time ago
 
   // Rules
   const canFeed = diffHours >= 4;
   const needsAttention = diffHours >= 3 && diffHours < 4;
 
-  // Status-text
-  let statusText = "";
-  let statusClass = "";
+  let statusText: string = "";
+  let statusClass: string = "";
 
+  // Format time and date
+  const fedDate = new Date(animalById.lastFed);
+  const formattedDateTime =
+    fedDate.toLocaleDateString('sv-SE', { dateStyle: 'medium' }) +
+    ' kl. ' +
+    fedDate.toLocaleTimeString('sv-SE', { hour: '2-digit', minute: '2-digit' });
+
+  const formattedTime = fedDate.toLocaleTimeString('sv-SE', {
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+
+  // Status-text
   if (diffHours < 3) {
-    statusText = `✅ Mätt – matades senast ${new Date(
-      animalById.lastFed
-    ).toLocaleTimeString()}`;
-    statusClass = "ok";
+    statusText = `✅ Mätt – matades senast ${formattedDateTime}`;
+    statusClass = 'ok';
   } else if (needsAttention) {
-    statusText = "⚠️ Djuret behöver snart matas";
-    statusClass = "warning";
+    statusText = `⚠️ Djuret börjar bli hungrigt – senast matad ${formattedTime}`;
+    statusClass = 'warning';
   } else if (diffHours >= 4) {
-    statusText = "⛔ Djuret behöver matas nu!";
-    statusClass = "danger";
+    statusText = `⛔ Djuret behöver matas nu! – senast matad ${formattedTime}`;
+    statusClass = 'danger';
   }
 
   // Feed animal -> update localstate
@@ -67,7 +77,7 @@ export const AboutAnimal = () => {
       type: AnimalFedActionTypes.FedMe,
       payload: animalById.id,
     });
-    
+
     setAnimalById({ ...animalById, lastFed: now });
   };
 
@@ -80,7 +90,7 @@ export const AboutAnimal = () => {
           src={animalById.imageUrl}
           alt={`Bild på ${animalById.name}`}
           onError={(e) => {
-            e.currentTarget.src = "/No-Image-Placeholder.svg";
+            e.currentTarget.src = '/No-Image-Placeholder.svg';
           }}
         />
         <p>Latinska namnet: {animalById.latinName}</p>
@@ -96,7 +106,7 @@ export const AboutAnimal = () => {
         <button
           onClick={feedAnimal}
           disabled={!canFeed}
-          className={canFeed ? "feed-btn" : "feed-btn disabled"}
+          className={canFeed ? 'feed-btn' : 'feed-btn disabled'}
         >
           Mata
         </button>
