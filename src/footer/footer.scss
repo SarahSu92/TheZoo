@@ -1,13 +1,22 @@
-footer {
-    font-family: Arial, Helvetica, sans-serif;
-    padding: 0.5rem;
-   
-}
+.footer-info {
+  display: flex;
+  flex-direction: column; 
+  gap: 0.5rem; 
+  color:#fff;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-right: 1rem;
 
-.phone {
-padding-right: 0.2rem;
-}
+  .footer-row {
+    gap: 0.5rem;
+    align-items: center;
+    display: flex;
 
-span {
-    padding-right: 1rem;
+    .icon {
+      font-size: 1.2rem;
+    }
+  }
+
+  .phone {
+    padding-right: 0.5rem;
+  }
 }

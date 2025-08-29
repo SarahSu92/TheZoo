@@ -16,7 +16,7 @@
     padding: 1rem;
     border: 1px solid #000;
     border-radius: 10px;
-    background-color: #fff;
+    background-color: #e7e7e7;
     font-family: Arial, Helvetica, sans-serif;
   }
 
@@ -81,5 +81,26 @@
       color: #666;
       cursor: not-allowed;
     }
+  }
+}
+
+@media screen and (min-width: 320px) {
+   .about-animalp {
+    max-width: 60%;
+    height: auto;
+
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .about-container {
+    width: 50vw;
+   
+  }
+
+   .about-animalp {
+    max-width: 60%;
+    height: auto;
+
   }
 }
