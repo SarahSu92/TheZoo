@@ -68,7 +68,7 @@ export const Animal = () => {
 
         return (
           <div className="animal-frame" key={a.id}>
-            <h2>{a.name}</h2>
+            <h2 className='animal-name'>{a.name}</h2>
             <img
               className="animalp"
               src={a.imageUrl}

@@ -1,10 +1,15 @@
-import { FaFacebookF, FaInstagram } from 'react-icons/fa';
+import { FaPhone, FaFacebookF, FaInstagram } from 'react-icons/fa';
+import'./footer.scss';
 
 export const Footer = () => {
   return (
     <footer>
-      <p className="pfooter">Kontakta oss: 00-000 00 00</p>
-      <p className="pfooter">Adress: Zoostigen 25 111 11 Borås</p>
+       <div className="footer-info">
+        <FaPhone className="phone" />
+        <span>00-000 00 00</span>
+        <span>Adress: Zoostigen 25, 111 11 Borås</span>
+      </div>
+
 
       <a 
         href="https://www.facebook.com"
