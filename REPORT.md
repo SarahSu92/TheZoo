@@ -71,7 +71,7 @@ Ha roligt, skratta och lär er massor!
 - C:\Work\AssignmentCorrector\backend\repos\fed24d-the-zoo-SarahSu92\src\reducers\AnimalReducer.ts - no-unused-vars - 'FedMe' is defined but never used.,no-unused-vars - 'SetAnimals' is defined but never used.
 
 ## 🏆 **Betyg: VG**
-📌 **Motivering:** Koden uppfyller alla krav för både betyg G och VG. Applikationen använder en router för att visa olika sidor och hanterar olika koncept såsom layouts, child-routes och error-element korrekt. Djuren presenteras på en översiktssida där användarna kan klicka på ett djur och mata det. Hanterar trasiga bild-länkar på ett bra sätt. Använder SCSS för styling och har implementerat animeringar samt används av context API och reducers för handhavande av djur. Datan hämtas med hjälp av en custom hook.
+📌 **Motivering:** Koden uppfyller alla krav för både G och VG. Projektet använder en router för att hantera navigation, context för att kommunicera mellan komponenter, och reducers för hantering av djurens status. Styling hanteras via SCSS och innehåller parametrar såsom animeringar och responsiv design. Trasiga bildlänkar hanteras korrekt, och djurens matstatus presenteras diskret och uppdateras realtid enligt tidreglerna som ställs. Tjänster och custom hooks används korrekt för datahantering och localStorage används för att spara matningsinformation.
 
 💡 **Förbättringsförslag:**  
-Inga större förbättringar behövs. Allt är välimplementerat och kodstilen är konsekvent och lättläst. Möjliga små förbättringar kan vara att använda fler animeringseffekter där brukligt och att eventuellt göra sidlayouten ytterligare responsiv över ännu fler brytpunkter om det finns möjlighet.
+Inga större förbättringar behövs. Möjligen kan kodens läsbarhet och underhåll förbättras genom att dela upp större komponenter till mindre, mer hanterbara delar. Ytterligare kommentarer och dokumentation kan läggas till för framtida utvecklare som kan ha nytta av att förstå koden lättare.
